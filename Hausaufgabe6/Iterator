@@ -1,0 +1,48 @@
+
+import java.util.*;
+
+public class FlagSetIterator<E> implements Iterator<E>{
+
+	SetNode <E> tempnext;
+	SetNode <E> vorher;
+
+	public FlagSetIterator(final SetNode <E> head) {
+		this.tempnext = head;
+		this.vorher = null;
+		while (this.tempnext != null && !this.tempnext.isActive()) {
+			this.tempnext = this.tempnext.getNext();
+		}
+	}
+	
+	public boolean hasNext() {
+		if (this.tempnext==null){
+			return false;
+		}
+		return true;		
+	}
+
+	public E next() {
+		if (this.hasNext()) {
+			E erg = this.tempnext.getElement();
+				this.vorher = this.tempnext;
+				this.tempnext = this.tempnext.getNext();
+				while (this.tempnext != null && !this.tempnext.isActive()) {
+					this.tempnext = this.tempnext.getNext();
+				}
+				return erg;
+		} else {
+				throw new NoSuchElementException();
+		}
+		
+	}
+
+	public void remove() {
+		if (this.vorher == null) {
+			throw new IllegalStateException(
+			throw new IllegalStateException("The next method has not been called before this remove operation!");
+		} else {
+			this.vorher.getInActive();
+			this.vorher = null;
+		}
+	}
+}

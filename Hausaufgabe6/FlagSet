@@ -1,0 +1,87 @@
+import java.util.*;
+
+public class FlagSet<E> extends AbstractIterableSet<E>{
+
+private SetNode<E> head;
+
+public FlagSet<E>(){
+	this.head= null;
+}
+
+
+public boolean add(E e){
+	SetNode<E> temp = this.head;
+	while(temp!=null){
+		E mem = temp.getElement();
+		if(mem==null) {
+			if (e == null) {
+				if (temp.getActive()) {
+					return false;
+				} else {
+					temp.activate();
+					return true;
+				}
+			}
+		} else if (e.equals(mem)) {
+			if (temp.getActive()) {
+				return false;
+			} else {
+				temp.activate();
+				return true;
+			}
+		}
+
+		temp=temp.getNext();
+	}
+	this.head = new SetNode<E>(e,this.head);
+	return true;
+}
+
+public void clear(){
+this.head=null;
+}
+
+public boolean contains(final Object o) {
+	for ( E mem : this) {
+		if (mem == null) {
+			if (o == null) {
+				return true;
+			}
+		} else if (mem.equals(o)) {
+			return true;
+		}
+	}
+	return false;
+}
+
+public Iterator<E> iterator(){
+return new FlagSetIterator<E>(this.head);
+}
+
+public boolean remove(Object o) {
+	SetNode <E> temp = this.head;
+		while (temp != null) {
+			E mem = temp.getElement();
+			if (mem == null) {
+				if (o == null) {
+					if (temp.getActive()) {
+						temp.setInActive();
+						return true;
+					} else {
+						return false;
+					}
+				}
+			} else if (mem.equals(o)) {
+				if (temp.getActive()) {
+					temp.setInActive();
+					return true;
+				} else {
+					return false;
+				}
+			}
+			temp = temp.getNext();
+		}
+		return false;
+	}
+
+}
